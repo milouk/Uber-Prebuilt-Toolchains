@@ -129,7 +129,7 @@
 .\" ========================================================================
 .\"
 .IX Title "AS 1"
-.TH AS 1 "2018-11-05" "binutils-2.29.0" "GNU Development Tools"
+.TH AS 1 "2018-03-14" "binutils-2.30.0" "GNU Development Tools"
 .\" For nroff, turn off justification.  Always turn off hyphenation; it makes
 .\" way too many mistakes in technical documents.
 .if n .ad l
@@ -332,7 +332,7 @@ as [\fB\-a\fR[\fBcdghlns\fR][=\fIfile\fR]] [\fB\-\-alternate\fR] [\fB\-D\fR]
     \fB\-m620\fR|\fB\-me500\fR|\fB\-e500x2\fR|\fB\-me500mc\fR|\fB\-me500mc64\fR|\fB\-me5500\fR|\fB\-me6500\fR|\fB\-mppc64bridge\fR|
     \fB\-mbooke\fR|\fB\-mpower4\fR|\fB\-mpwr4\fR|\fB\-mpower5\fR|\fB\-mpwr5\fR|\fB\-mpwr5x\fR|\fB\-mpower6\fR|\fB\-mpwr6\fR|
     \fB\-mpower7\fR|\fB\-mpwr7\fR|\fB\-mpower8\fR|\fB\-mpwr8\fR|\fB\-mpower9\fR|\fB\-mpwr9\fR\fB\-ma2\fR|
-    \fB\-mcell\fR|\fB\-mspe\fR|\fB\-mtitan\fR|\fB\-me300\fR|\fB\-mcom\fR]
+    \fB\-mcell\fR|\fB\-mspe\fR|\fB\-mspe2\fR|\fB\-mtitan\fR|\fB\-me300\fR|\fB\-mcom\fR]
    [\fB\-many\fR] [\fB\-maltivec\fR|\fB\-mvsx\fR|\fB\-mhtm\fR|\fB\-mvle\fR]
    [\fB\-mregnames\fR|\fB\-mno\-regnames\fR]
    [\fB\-mrelocatable\fR|\fB\-mrelocatable\-lib\fR|\fB\-K \s-1PIC\s0\fR] [\fB\-memb\fR]
@@ -344,6 +344,11 @@ as [\fB\-a\fR[\fBcdghlns\fR][=\fIfile\fR]] [\fB\-\-alternate\fR] [\fB\-D\fR]
    [\fB\-link\-relax\fR]
    [\fB\-mnolink\-relax\fR]
    [\fB\-mno\-warn\-regname\-label\fR]
+.PP
+\&\fITarget RISC-V options:\fR
+   [\fB\-fpic\fR|\fB\-fPIC\fR|\fB\-fno\-pic\fR]
+   [\fB\-march\fR=\fI\s-1ISA\s0\fR]
+   [\fB\-mabi\fR=\fI\s-1ABI\s0\fR]
 .PP
 \&\fITarget \s-1RL78\s0 options:\fR
    [\fB\-mg10\fR]
@@ -358,10 +363,6 @@ as [\fB\-a\fR[\fBcdghlns\fR][=\fIfile\fR]] [\fB\-\-alternate\fR] [\fB\-D\fR]
    [\fB\-mrelax\fR]
    [\fB\-mint\-register=\fR\fInumber\fR]
    [\fB\-mgcc\-abi\fR|\fB\-mrx\-abi\fR]
-.PP
-\&\fITarget RISC-V options:\fR
-   [\fB\-march\fR=\fI\s-1ISA\s0\fR]
-   [\fB\-mabi\fR=\fI\s-1ABI\s0\fR]
 .PP
 \&\fITarget s390 options:\fR
    [\fB\-m31\fR|\fB\-m64\fR] [\fB\-mesa\fR|\fB\-mzarch\fR] [\fB\-march\fR=\fI\s-1CPU\s0\fR]
@@ -780,6 +781,7 @@ on the target processor.  The following processor names are recognized:
 \&\f(CW\*(C`exynos\-m1\*(C'\fR,
 \&\f(CW\*(C`falkor\*(C'\fR,
 \&\f(CW\*(C`qdf24xx\*(C'\fR,
+\&\f(CW\*(C`saphira\*(C'\fR,
 \&\f(CW\*(C`thunderx\*(C'\fR,
 \&\f(CW\*(C`vulcan\*(C'\fR,
 \&\f(CW\*(C`xgene1\*(C'\fR
@@ -803,7 +805,7 @@ This option specifies the target architecture.  The assembler will
 issue an error message if an attempt is made to assemble an
 instruction which will not execute on the target architecture.  The
 following architecture names are recognized: \f(CW\*(C`armv8\-a\*(C'\fR,
-\&\f(CW\*(C`armv8.1\-a\*(C'\fR, \f(CW\*(C`armv8.2\-a\*(C'\fR and \f(CW\*(C`armv8.3\-a\*(C'\fR.
+\&\f(CW\*(C`armv8.1\-a\*(C'\fR, \f(CW\*(C`armv8.2\-a\*(C'\fR, \f(CW\*(C`armv8.3\-a\*(C'\fR and \f(CW\*(C`armv8.4\-a\*(C'\fR.
 .Sp
 If both \fB\-mcpu\fR and \fB\-march\fR are specified, the
 assembler will use the setting for \fB\-mcpu\fR.  If neither are
@@ -1069,7 +1071,8 @@ usage and use x86\-64 as target platform).
 .IX Item "-n"
 By default, x86 \s-1GAS\s0 replaces multiple nop instructions used for
 alignment within code sections with multi-byte nop instructions such
-as leal 0(%esi,1),%esi.  This switch disables the optimization.
+as leal 0(%esi,1),%esi.  This switch disables the optimization if a single
+byte nop (0x90) is explicitly specified as the fill byte for alignment.
 .IP "\fB\-\-divide\fR" 4
 .IX Item "--divide"
 On SVR4\-derived platforms, the character \fB/\fR is treated as a comment
@@ -1160,6 +1163,9 @@ accept various extension mnemonics.  For example,
 \&\f(CW\*(C`rdpid\*(C'\fR,
 \&\f(CW\*(C`ptwrite\*(C'\fR,
 \&\f(CW\*(C`cet\*(C'\fR,
+\&\f(CW\*(C`gfni\*(C'\fR,
+\&\f(CW\*(C`vaes\*(C'\fR,
+\&\f(CW\*(C`vpclmulqdq\*(C'\fR,
 \&\f(CW\*(C`prefetchwt1\*(C'\fR,
 \&\f(CW\*(C`clflushopt\*(C'\fR,
 \&\f(CW\*(C`se1\*(C'\fR,
@@ -1176,6 +1182,9 @@ accept various extension mnemonics.  For example,
 \&\f(CW\*(C`avx512_4fmaps\*(C'\fR,
 \&\f(CW\*(C`avx512_4vnniw\*(C'\fR,
 \&\f(CW\*(C`avx512_vpopcntdq\*(C'\fR,
+\&\f(CW\*(C`avx512_vbmi2\*(C'\fR,
+\&\f(CW\*(C`avx512_vnni\*(C'\fR,
+\&\f(CW\*(C`avx512_bitalg\*(C'\fR,
 \&\f(CW\*(C`noavx512f\*(C'\fR,
 \&\f(CW\*(C`noavx512cd\*(C'\fR,
 \&\f(CW\*(C`noavx512er\*(C'\fR,
@@ -1188,6 +1197,9 @@ accept various extension mnemonics.  For example,
 \&\f(CW\*(C`noavx512_4fmaps\*(C'\fR,
 \&\f(CW\*(C`noavx512_4vnniw\*(C'\fR,
 \&\f(CW\*(C`noavx512_vpopcntdq\*(C'\fR,
+\&\f(CW\*(C`noavx512_vbmi2\*(C'\fR,
+\&\f(CW\*(C`noavx512_vnni\*(C'\fR,
+\&\f(CW\*(C`noavx512_bitalg\*(C'\fR,
 \&\f(CW\*(C`vmx\*(C'\fR,
 \&\f(CW\*(C`vmfunc\*(C'\fR,
 \&\f(CW\*(C`smx\*(C'\fR,
@@ -2069,6 +2081,9 @@ Generate code for Freescale e6500 core complex.
 .IP "\fB\-mspe\fR" 4
 .IX Item "-mspe"
 Generate code for Motorola \s-1SPE\s0 instructions.
+.IP "\fB\-mspe2\fR" 4
+.IX Item "-mspe2"
+Generate code for Freescale \s-1SPE2\s0 instructions.
 .IP "\fB\-mtitan\fR" 4
 .IX Item "-mtitan"
 Generate code for AppliedMicro Titan core complex.
@@ -2160,9 +2175,13 @@ If an alignment directive inserts more than \fIcount\fR nops, put a
 branch at the beginning to skip execution of the nops.
 .PP
 The following options are available when as is configured for a
-RISC-V  processor.
+RISC-V processor.
 .IP "\fB\-fpic\fR" 4
 .IX Item "-fpic"
+.PD 0
+.IP "\fB\-fPIC\fR" 4
+.IX Item "-fPIC"
+.PD
 Generate position-independent code
 .IP "\fB\-fno\-pic\fR" 4
 .IX Item "-fno-pic"
@@ -2426,7 +2445,7 @@ Treat undocumented Z80 instructions that do not work on R800 as errors.
 \&\fIgcc\fR\|(1), \fIld\fR\|(1), and the Info entries for \fIbinutils\fR and \fIld\fR.
 .SH "COPYRIGHT"
 .IX Header "COPYRIGHT"
-Copyright (c) 1991\-2017 Free Software Foundation, Inc.
+Copyright (c) 1991\-2018 Free Software Foundation, Inc.
 .PP
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the \s-1GNU\s0 Free Documentation License, Version 1.3

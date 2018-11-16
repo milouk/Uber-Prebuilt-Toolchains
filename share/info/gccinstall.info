@@ -1,7 +1,7 @@
 This is gccinstall.info, produced by makeinfo version 6.5 from
 install.texi.
 
-Copyright (C) 1988-2017 Free Software Foundation, Inc.
+Copyright (C) 1988-2018 Free Software Foundation, Inc.
 
    Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3 or
@@ -24,7 +24,7 @@ START-INFO-DIR-ENTRY
 * gccinstall: (gccinstall).    Installing the GNU Compiler Collection.
 END-INFO-DIR-ENTRY
 
-   Copyright (C) 1988-2017 Free Software Foundation, Inc.
+   Copyright (C) 1988-2018 Free Software Foundation, Inc.
 
    Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3 or
@@ -200,7 +200,7 @@ GNU tar version 1.14 (or later)
      systems' 'tar' programs will also work, only try GNU 'tar' if you
      have problems.
 
-Perl version 5.6.1 (or later)
+Perl version between 5.6.1 and 5.6.24
 
      Necessary when targeting Darwin, building 'libstdc++', and not
      using '--disable-symvers'.  Necessary when targeting Solaris 2 with
@@ -212,6 +212,8 @@ Perl version 5.6.1 (or later)
      when generating manpages from Texinfo manuals.  Used by various
      scripts to generate some files included in SVN (mainly
      Unicode-related and rarely changing) from source tables.
+
+     Used by 'automake'.
 
    Several support libraries are necessary to build GCC, some are
 required, others optional.  While any sufficiently new version of
@@ -286,6 +288,9 @@ automake version 1.11.6
      in the 1.11 series, which is currently 1.11.6.  When regenerating a
      directory to a newer version, please update all the directories
      using an older 1.11 to the latest released version.
+
+     Note that 'automake' 1.11.6 is incompatible with 'perl' version
+     5.6.26.
 
 gettext version 0.14.5 (or later)
 
@@ -799,33 +804,6 @@ option.
      Specify that stabs debugging information should be used instead of
      whatever format the host normally uses.  Normally GCC uses the same
      debug format as the host system.
-
-     On MIPS based systems and on Alphas, you must specify whether you
-     want GCC to create the normal ECOFF debugging format, or to use
-     BSD-style stabs passed through the ECOFF symbol table.  The normal
-     ECOFF debug format cannot fully handle languages other than C.  BSD
-     stabs format can handle other languages, but it only works with the
-     GNU debugger GDB.
-
-     Normally, GCC uses the ECOFF debugging format by default; if you
-     prefer BSD stabs, specify '--with-stabs' when you configure GCC.
-
-     No matter which default you choose when you configure GCC, the user
-     can use the '-gcoff' and '-gstabs+' options to specify explicitly
-     the debug format for a particular compilation.
-
-     '--with-stabs' is meaningful on the ISC system on the 386, also, if
-     '--with-gas' is used.  It selects use of stabs debugging
-     information embedded in COFF output.  This kind of debugging
-     information supports C++ well; ordinary COFF debugging information
-     does not.
-
-     '--with-stabs' is also meaningful on 386 systems running SVR4.  It
-     selects use of stabs debugging information embedded in ELF output.
-     The C++ compiler currently (2.6.0) does not support the DWARF
-     debugging information normally used on 386 SVR4 platforms; stabs
-     provide a workable alternative.  This requires gas and gdb, as the
-     normal SVR4 tools can not generate or interpret stabs.
 
 '--with-tls=DIALECT'
      Specify the default TLS dialect, for systems were there is a
@@ -1406,7 +1384,8 @@ option.
 
 '--disable-libssp'
      Specify that the run-time libraries for stack smashing protection
-     should not be built.
+     should not be built or linked against.  On many targets library
+     support is provided by the C library instead.
 
 '--disable-libquadmath'
      Specify that the GCC quad-precision math library should not be
@@ -1627,6 +1606,35 @@ option.
      built against GNU C Library 2.4 and later, 64-bit 'long double'
      otherwise.
 
+'--with-long-double-format=ibm'
+'--with-long-double-format=ieee'
+     Specify whether 'long double' uses the IBM extended double format
+     or the IEEE 128-bit floating point format on PowerPC Linux systems.
+     This configuration switch will only work on little endian PowerPC
+     Linux systems and on big endian 64-bit systems where the default
+     cpu is at least power7 (i.e.  '--with-cpu=power7',
+     '--with-cpu=power8', or '--with-cpu=power9' is used).
+
+     If you use the '--with-long-double-64' configuration option, the
+     '--with-long-double-format=ibm' and
+     '--with-long-double-format=ieee' options are ignored.
+
+     The default 'long double' format is to use IBM extended double.
+     Until all of the libraries are converted to use IEEE 128-bit
+     floating point, it is not recommended to use
+     '--with-long-double-format=ieee'.
+
+     On little endian PowerPC Linux systems, if you explicitly set the
+     'long double' type, it will build multilibs to allow you to select
+     either 'long double' format, unless you disable multilibs with the
+     '--disable-multilib' option.  At present, 'long double' multilibs
+     are not built on big endian PowerPC Linux systems.  If you are
+     building multilibs, you will need to configure the compiler using
+     the '--with-system-zlib' option.
+
+     If you do not set the 'long double' type explicitly, no multilibs
+     will be generated.
+
 '--enable-fdpic'
      On SH Linux systems, generate ELF FDPIC code.
 
@@ -1811,6 +1819,19 @@ option.
      '--with-hsa-runtime=HSAINSTALLDIR' option is a shorthand for
      '--with-hsa-runtime-lib=HSAINSTALLDIR/lib' and
      '--with-hsa-runtime-include=HSAINSTALLDIR/include'.
+
+'--enable-cet'
+'--disable-cet'
+     Enable building target run-time libraries with control-flow
+     instrumentation, see '-fcf-protection' option.  When '--enable-cet'
+     is specified target libraries are configured to add
+     '-fcf-protection' and, if needed, other target specific options to
+     a set of building options.
+
+     The option is enabled by default on Linux/x86 if target binutils
+     supports 'Intel CET' instructions.  In this case the target
+     libraries are configured to get additional '-fcf-protection' and
+     '-mcet' options.
 
 Cross-Compiler-Specific Options
 -------------------------------
@@ -2185,6 +2206,13 @@ configurations are:
      useful to verify the full '-fcompare-debug' testing coverage.  It
      must be used along with 'bootstrap-debug-lean' and
      'bootstrap-debug-lib'.
+
+'bootstrap-cet'
+     This option enables Intel CET for host tools during bootstrapping.
+     'BUILD_CONFIG=bootstrap-cet' is equivalent to adding
+     '-fcf-protection -mcet' to 'BOOT_CFLAGS'.  This option assumes that
+     the host supports Intel CET (e.g.  GNU assembler version 2.30 or
+     later).
 
 'bootstrap-time'
      Arranges for the run time of each program started by the GCC
@@ -2708,26 +2736,12 @@ alpha*-*-*
 ==========
 
 This section contains general configuration information for all
-alpha-based platforms using ELF (in particular, ignore this section for
-DEC OSF/1, Digital UNIX and Tru64 UNIX).  In addition to reading this
-section, please read all other sections that match your target.
+Alpha-based platforms using ELF.  In addition to reading this section,
+please read all other sections that match your target.
 
    We require binutils 2.11.2 or newer.  Previous binutils releases had
 a number of problems with DWARF 2 debugging information, not the least
 of which is incorrect linking of shared libraries.
-
-alpha*-dec-osf5.1
-=================
-
-Systems using processors that implement the DEC Alpha architecture and
-are running the DEC/Compaq/HP Unix (DEC OSF/1, Digital UNIX, or
-Compaq/HP Tru64 UNIX) operating system, for example the DEC Alpha AXP
-systems.
-
-   Support for Tru64 UNIX V5.1 has been removed in GCC 4.8.  As of GCC
-4.6, support for Tru64 UNIX V4.0 and V5.0 has been removed.  As of GCC
-3.2, versions before 'alpha*-dec-osf4' are no longer supported.  (These
-are the versions which identify themselves as DEC OSF/1.)
 
 amd64-*-solaris2.1[0-9]*
 ========================
@@ -3085,18 +3099,16 @@ with GCC 4.7, there is also a 64-bit 'amd64-*-solaris2.1[0-9]*' or
 The versions included in Solaris 10, from GNU binutils 2.15 (in
 '/usr/sfw/bin/gas'), and Solaris 11, from GNU binutils 2.19 or newer
 (also available as '/usr/bin/gas' and '/usr/gnu/bin/as'), work fine.
-Please note that the current version, from GNU binutils 2.26, only works
-on Solaris 12 when using the Solaris linker.  On Solaris 10 and 11, you
-either have to wait for GNU binutils 2.26.1 or newer, or stay with GNU
-binutils 2.25.1.  Recent versions of the Solaris assembler in
-'/usr/ccs/bin/as' work almost as well, though.
+The current version, from GNU binutils 2.29, is known to work, but the
+version from GNU binutils 2.26 must be avoided.  Recent versions of the
+Solaris assembler in '/usr/ccs/bin/as' work almost as well, though.
 
    For linking, the Solaris linker, is preferred.  If you want to use
 the GNU linker instead, note that due to a packaging bug the version in
 Solaris 10, from GNU binutils 2.15 (in '/usr/sfw/bin/gld'), cannot be
 used, while the version in Solaris 11, from GNU binutils 2.19 or newer
 (also in '/usr/gnu/bin/ld' and '/usr/bin/gld'), works, as does the
-latest version, from GNU binutils 2.26.
+latest version, from GNU binutils 2.29.
 
    To use GNU 'as', configure with the options '--with-gnu-as
 --with-as=/usr/sfw/bin/gas'.  It may be necessary to configure with
@@ -3387,18 +3399,6 @@ generating the proper signal ('SIGFPE').  To enable the use of break,
 use the '--with-divide=breaks' 'configure' option when configuring GCC.
 The default is to use traps on systems that support them.
 
-mips-sgi-irix5
-==============
-
-Support for IRIX 5 has been removed in GCC 4.6.
-
-mips-sgi-irix6
-==============
-
-Support for IRIX 6.5 has been removed in GCC 4.8.  Support for IRIX 6
-releases before 6.5 has been removed in GCC 4.6, as well as support for
-the O32 ABI.
-
 moxie-*-elf
 ===========
 
@@ -3605,19 +3605,18 @@ if you have '/usr/xpg4/bin' in your 'PATH', we recommend that you place
 in conjunction with the Solaris linker.  The GNU 'as' versions included
 in Solaris 10, from GNU binutils 2.15 (in '/usr/sfw/bin/gas'), and
 Solaris 11, from GNU binutils 2.19 or newer (also in '/usr/bin/gas' and
-'/usr/gnu/bin/as'), are known to work.  Current versions of GNU binutils
-(2.26) are known to work as well, with the caveat mentioned in
-i?86-*-solaris2.10 .  Note that your mileage may vary if you use a
-combination of the GNU tools and the Solaris tools: while the
-combination GNU 'as' + Sun 'ld' should reasonably work, the reverse
-combination Sun 'as' + GNU 'ld' may fail to build or cause memory
-corruption at runtime in some cases for C++ programs.  GNU 'ld' usually
-works as well, although the version included in Solaris 10 cannot be
-used due to several bugs.  Again, the current version (2.26) is known to
-work, but generally lacks platform specific features, so better stay
-with Solaris 'ld'.  To use the LTO linker plugin ('-fuse-linker-plugin')
-with GNU 'ld', GNU binutils _must_ be configured with
-'--enable-largefile'.
+'/usr/gnu/bin/as'), are known to work.  The current version, from GNU
+binutils 2.29, is known to work as well.  Note that your mileage may
+vary if you use a combination of the GNU tools and the Solaris tools:
+while the combination GNU 'as' + Sun 'ld' should reasonably work, the
+reverse combination Sun 'as' + GNU 'ld' may fail to build or cause
+memory corruption at runtime in some cases for C++ programs.  GNU 'ld'
+usually works as well, although the version included in Solaris 10
+cannot be used due to several bugs.  Again, the current version (2.29)
+is known to work, but generally lacks platform specific features, so
+better stay with Solaris 'ld'.  To use the LTO linker plugin
+('-fuse-linker-plugin') with GNU 'ld', GNU binutils _must_ be configured
+with '--enable-largefile'.
 
    To enable symbol versioning in 'libstdc++' with the Solaris linker,
 you need to have any version of GNU 'c++filt', which is part of GNU
@@ -3829,7 +3828,7 @@ and which C libraries are used.
    * MinGW *-*-mingw32: MinGW is a native GCC port for the Win32
      subsystem that provides a subset of POSIX.
    * MKS i386-pc-mks: NuTCracker from MKS. See
-     <http://www.mkssoftware.com/> for more information.
+     <https://www.mkssoftware.com> for more information.
 
 Intel 64-bit versions
 ---------------------
@@ -4573,7 +4572,7 @@ Concept Index
 * Menu:
 
 * Binaries:                              Binaries.           (line    6)
-* build_configargs:                      Configuration.      (line 1527)
+* build_configargs:                      Configuration.      (line 1543)
 * Configuration:                         Configuration.      (line    6)
 * configurations supported by GCC:       Configurations.     (line    6)
 * Downloading GCC:                       Downloading the source.
@@ -4583,7 +4582,7 @@ Concept Index
 * FDL, GNU Free Documentation License:   GNU Free Documentation License.
                                                              (line    6)
 * Host specific installation:            Specific.           (line    6)
-* host_configargs:                       Configuration.      (line 1531)
+* host_configargs:                       Configuration.      (line 1547)
 * Installing GCC: Binaries:              Binaries.           (line    6)
 * Installing GCC: Building:              Building.           (line    6)
 * Installing GCC: Configuration:         Configuration.      (line    6)
@@ -4593,7 +4592,7 @@ Concept Index
 * Specific installation notes:           Specific.           (line    6)
 * Target specific installation:          Specific.           (line    6)
 * Target specific installation notes:    Specific.           (line    6)
-* target_configargs:                     Configuration.      (line 1535)
+* target_configargs:                     Configuration.      (line 1551)
 * Testing:                               Testing.            (line    6)
 * Testsuite:                             Testing.            (line    6)
 
@@ -4603,104 +4602,101 @@ Tag Table:
 Node: Top1696
 Node: Installing GCC2254
 Node: Prerequisites3888
-Node: Downloading the source14327
-Node: Configuration15989
-Ref: with-gnu-as31589
-Ref: with-as32484
-Ref: with-gnu-ld33897
-Ref: WithAixSoname55319
-Ref: AixLdCommand55980
-Node: Building88876
-Node: Testing104910
-Node: Final install112782
-Node: Binaries118082
-Node: Specific119209
-Ref: aarch64-x-x119716
-Ref: alpha-x-x121148
-Ref: alpha-dec-osf51121637
-Ref: amd64-x-solaris210122162
-Ref: arc-x-elf32122265
-Ref: arc-linux-uclibc122441
-Ref: arm-x-eabi122582
-Ref: avr122835
-Ref: bfin123416
-Ref: cr16123658
-Ref: cris124074
-Ref: dos124772
-Ref: epiphany-x-elf125095
-Ref: x-x-freebsd125200
-Ref: ft32-x-elf127000
-Ref: h8300-hms127098
-Ref: hppa-hp-hpux127450
-Ref: hppa-hp-hpux10129822
-Ref: hppa-hp-hpux11130235
-Ref: x-x-linux-gnu135637
-Ref: ix86-x-linux135830
-Ref: ix86-x-solaris210136143
-Ref: ia64-x-linux137602
-Ref: ia64-x-hpux138372
-Ref: x-ibm-aix138927
-Ref: TransferAixShobj142589
-Ref: iq2000-x-elf146399
-Ref: lm32-x-elf146539
-Ref: lm32-x-uclinux146643
-Ref: m32c-x-elf146771
-Ref: m32r-x-elf146873
-Ref: m68k-x-x146975
-Ref: m68k-x-uclinux148013
-Ref: microblaze-x-elf148258
-Ref: mips-x-x148377
-Ref: mips-sgi-irix5150287
-Ref: mips-sgi-irix6150367
-Ref: moxie-x-elf150554
-Ref: msp430-x-elf150601
-Ref: nds32le-x-elf150704
-Ref: nds32be-x-elf150776
-Ref: nvptx-x-none150845
-Ref: powerpc-x-x151372
-Ref: powerpc-x-darwin151563
-Ref: powerpc-x-elf152057
-Ref: powerpc-x-linux-gnu152142
-Ref: powerpc-x-netbsd152237
-Ref: powerpc-x-eabisim152325
-Ref: powerpc-x-eabi152451
-Ref: powerpcle-x-elf152527
-Ref: powerpcle-x-eabisim152619
-Ref: powerpcle-x-eabi152752
-Ref: rl78-x-elf152835
-Ref: riscv32-x-elf152941
-Ref: riscv32-x-linux153151
-Ref: riscv64-x-elf153329
-Ref: riscv64-x-linux153539
-Ref: rx-x-elf153717
-Ref: s390-x-linux153763
-Ref: s390x-x-linux153835
-Ref: s390x-ibm-tpf153922
-Ref: x-x-solaris2154053
-Ref: sparc-x-x157966
-Ref: sparc-sun-solaris2158468
-Ref: sparc-sun-solaris210159607
-Ref: sparc-x-linux159982
-Ref: sparc64-x-solaris2160013
-Ref: sparcv9-x-solaris2160346
-Ref: c6x-x-x160433
-Ref: tilegx-*-linux160525
-Ref: tilegxbe-*-linux160667
-Ref: tilepro-*-linux160810
-Ref: visium-x-elf160931
-Ref: x-x-vxworks161039
-Ref: x86-64-x-x162562
-Ref: x86-64-x-solaris210162890
-Ref: xtensa-x-elf163554
-Ref: xtensa-x-linux164225
-Ref: windows164566
-Ref: x-x-cygwin166407
-Ref: x-x-mingw32166960
-Ref: older167186
-Ref: elf169303
-Node: Old169561
-Node: Configurations172694
-Node: GNU Free Documentation License176232
-Node: Concept Index201360
+Node: Downloading the source14444
+Node: Configuration16106
+Ref: with-gnu-as31706
+Ref: with-as32601
+Ref: with-gnu-ld34014
+Ref: WithAixSoname54013
+Ref: AixLdCommand54674
+Node: Building89645
+Node: Testing105982
+Node: Final install113854
+Node: Binaries119154
+Node: Specific120281
+Ref: aarch64-x-x120788
+Ref: alpha-x-x122220
+Ref: amd64-x-solaris210122629
+Ref: arc-x-elf32122732
+Ref: arc-linux-uclibc122908
+Ref: arm-x-eabi123049
+Ref: avr123302
+Ref: bfin123883
+Ref: cr16124125
+Ref: cris124541
+Ref: dos125239
+Ref: epiphany-x-elf125562
+Ref: x-x-freebsd125667
+Ref: ft32-x-elf127467
+Ref: h8300-hms127565
+Ref: hppa-hp-hpux127917
+Ref: hppa-hp-hpux10130289
+Ref: hppa-hp-hpux11130702
+Ref: x-x-linux-gnu136104
+Ref: ix86-x-linux136297
+Ref: ix86-x-solaris210136610
+Ref: ia64-x-linux137955
+Ref: ia64-x-hpux138725
+Ref: x-ibm-aix139280
+Ref: TransferAixShobj142942
+Ref: iq2000-x-elf146752
+Ref: lm32-x-elf146892
+Ref: lm32-x-uclinux146996
+Ref: m32c-x-elf147124
+Ref: m32r-x-elf147226
+Ref: m68k-x-x147328
+Ref: m68k-x-uclinux148366
+Ref: microblaze-x-elf148611
+Ref: mips-x-x148730
+Ref: moxie-x-elf150640
+Ref: msp430-x-elf150687
+Ref: nds32le-x-elf150790
+Ref: nds32be-x-elf150862
+Ref: nvptx-x-none150931
+Ref: powerpc-x-x151458
+Ref: powerpc-x-darwin151649
+Ref: powerpc-x-elf152143
+Ref: powerpc-x-linux-gnu152228
+Ref: powerpc-x-netbsd152323
+Ref: powerpc-x-eabisim152411
+Ref: powerpc-x-eabi152537
+Ref: powerpcle-x-elf152613
+Ref: powerpcle-x-eabisim152705
+Ref: powerpcle-x-eabi152838
+Ref: rl78-x-elf152921
+Ref: riscv32-x-elf153027
+Ref: riscv32-x-linux153237
+Ref: riscv64-x-elf153415
+Ref: riscv64-x-linux153625
+Ref: rx-x-elf153803
+Ref: s390-x-linux153849
+Ref: s390x-x-linux153921
+Ref: s390x-ibm-tpf154008
+Ref: x-x-solaris2154139
+Ref: sparc-x-x158006
+Ref: sparc-sun-solaris2158508
+Ref: sparc-sun-solaris210159647
+Ref: sparc-x-linux160022
+Ref: sparc64-x-solaris2160053
+Ref: sparcv9-x-solaris2160386
+Ref: c6x-x-x160473
+Ref: tilegx-*-linux160565
+Ref: tilegxbe-*-linux160707
+Ref: tilepro-*-linux160850
+Ref: visium-x-elf160971
+Ref: x-x-vxworks161079
+Ref: x86-64-x-x162602
+Ref: x86-64-x-solaris210162930
+Ref: xtensa-x-elf163594
+Ref: xtensa-x-linux164265
+Ref: windows164606
+Ref: x-x-cygwin166447
+Ref: x-x-mingw32167000
+Ref: older167226
+Ref: elf169343
+Node: Old169601
+Node: Configurations172734
+Node: GNU Free Documentation License176272
+Node: Concept Index201400
 
 End Tag Table

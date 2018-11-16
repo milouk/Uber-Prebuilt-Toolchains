@@ -129,7 +129,7 @@
 .\" ========================================================================
 .\"
 .IX Title "LD 1"
-.TH LD 1 "2018-11-05" "binutils-2.29.0" "GNU Development Tools"
+.TH LD 1 "2018-03-14" "binutils-2.30.0" "GNU Development Tools"
 .\" For nroff, turn off justification.  Always turn off hyphenation; it makes
 .\" way too many mistakes in technical documents.
 .if n .ad l
@@ -968,143 +968,9 @@ for Solaris compatibility.
 .IX Item "-z keyword"
 The recognized keywords are:
 .RS 4
-.IP "\fBcombreloc\fR" 4
-.IX Item "combreloc"
-Combines multiple reloc sections and sorts them to make dynamic symbol
-lookup caching possible.
-.IP "\fBcommon\fR" 4
-.IX Item "common"
-Generate common symbols with the \s-1STT_COMMON\s0 type druing a relocatable
-link.
-.IP "\fBdefs\fR" 4
-.IX Item "defs"
-Disallows undefined symbols in object files.  Undefined symbols in
-shared libraries are still allowed.
-.IP "\fBexecstack\fR" 4
-.IX Item "execstack"
-Marks the object as requiring executable stack.
-.IP "\fBglobal\fR" 4
-.IX Item "global"
-This option is only meaningful when building a shared object.  It makes
-the symbols defined by this shared object available for symbol resolution
-of subsequently loaded libraries.
-.IP "\fBinitfirst\fR" 4
-.IX Item "initfirst"
-This option is only meaningful when building a shared object.
-It marks the object so that its runtime initialization will occur
-before the runtime initialization of any other objects brought into
-the process at the same time.  Similarly the runtime finalization of
-the object will occur after the runtime finalization of any other
-objects.
-.IP "\fBinterpose\fR" 4
-.IX Item "interpose"
-Marks the object that its symbol table interposes before all symbols
-but the primary executable.
-.IP "\fBlazy\fR" 4
-.IX Item "lazy"
-When generating an executable or shared library, mark it to tell the
-dynamic linker to defer function call resolution to the point when
-the function is called (lazy binding), rather than at load time.
-Lazy binding is the default.
-.IP "\fBloadfltr\fR" 4
-.IX Item "loadfltr"
-Marks  the object that its filters be processed immediately at
-runtime.
-.IP "\fBmuldefs\fR" 4
-.IX Item "muldefs"
-Allows multiple definitions.
-.IP "\fBnocombreloc\fR" 4
-.IX Item "nocombreloc"
-Disables multiple reloc sections combining.
-.IP "\fBnocommon\fR" 4
-.IX Item "nocommon"
-Generate common symbols with the \s-1STT_OBJECT\s0 type druing a relocatable
-link.
-.IP "\fBnocopyreloc\fR" 4
-.IX Item "nocopyreloc"
-Disable linker generated .dynbss variables used in place of variables
-defined in shared libraries.  May result in dynamic text relocations.
-.IP "\fBnodefaultlib\fR" 4
-.IX Item "nodefaultlib"
-Marks the object that the search for dependencies of this object will
-ignore any default library search paths.
-.IP "\fBnodelete\fR" 4
-.IX Item "nodelete"
-Marks the object shouldn't be unloaded at runtime.
-.IP "\fBnodlopen\fR" 4
-.IX Item "nodlopen"
-Marks the object not available to \f(CW\*(C`dlopen\*(C'\fR.
-.IP "\fBnodump\fR" 4
-.IX Item "nodump"
-Marks the object can not be dumped by \f(CW\*(C`dldump\*(C'\fR.
-.IP "\fBnoexecstack\fR" 4
-.IX Item "noexecstack"
-Marks the object as not requiring executable stack.
-.IP "\fBtext\fR" 4
-.IX Item "text"
-Treat \s-1DT_TEXTREL\s0 in shared object as error.
-.IP "\fBnotext\fR" 4
-.IX Item "notext"
-Don't treat \s-1DT_TEXTREL\s0 in shared object as error.
-.IP "\fBtextoff\fR" 4
-.IX Item "textoff"
-Don't treat \s-1DT_TEXTREL\s0 in shared object as error.
-.IP "\fBnorelro\fR" 4
-.IX Item "norelro"
-Don't create an \s-1ELF\s0 \f(CW\*(C`PT_GNU_RELRO\*(C'\fR segment header in the object.
-.IP "\fBnow\fR" 4
-.IX Item "now"
-When generating an executable or shared library, mark it to tell the
-dynamic linker to resolve all symbols when the program is started, or
-when the shared library is linked to using dlopen, instead of
-deferring function call resolution to the point when the function is
-first called.
-.IP "\fBorigin\fR" 4
-.IX Item "origin"
-Marks the object may contain \f(CW$ORIGIN\fR.
-.IP "\fBrelro\fR" 4
-.IX Item "relro"
-Create an \s-1ELF\s0 \f(CW\*(C`PT_GNU_RELRO\*(C'\fR segment header in the object.
-.IP "\fBmax\-page\-size=\fR\fIvalue\fR" 4
-.IX Item "max-page-size=value"
-Set the emulation maximum page size to \fIvalue\fR.
-.IP "\fBcommon\-page\-size=\fR\fIvalue\fR" 4
-.IX Item "common-page-size=value"
-Set the emulation common page size to \fIvalue\fR.
-.IP "\fBstack\-size=\fR\fIvalue\fR" 4
-.IX Item "stack-size=value"
-Specify a stack size for in an \s-1ELF\s0 \f(CW\*(C`PT_GNU_STACK\*(C'\fR segment.
-Specifying zero will override any default non-zero sized
-\&\f(CW\*(C`PT_GNU_STACK\*(C'\fR segment creation.
 .IP "\fBbndplt\fR" 4
 .IX Item "bndplt"
 Always generate \s-1BND\s0 prefix in \s-1PLT\s0 entries. Supported for Linux/x86_64.
-.IP "\fBnoextern-protected-data\fR" 4
-.IX Item "noextern-protected-data"
-Don't treat protected data symbol as external when building shared
-library.  This option overrides linker backend default.  It can be used
-to workaround incorrect relocations against protected data symbols
-generated by compiler.  Updates on protected data symbols by another
-module aren't visible to the resulting shared library.  Supported for
-i386 and x86\-64.
-.IP "\fBdynamic-undefined-weak\fR" 4
-.IX Item "dynamic-undefined-weak"
-Make undefined weak symbols dynamic when building a dynamic object,
-if they are referenced from a regular object file and not forced local
-by symbol visibility or versioning.  Not all targets support this
-option.
-.IP "\fBnodynamic-undefined-weak\fR" 4
-.IX Item "nodynamic-undefined-weak"
-Do not make undefined weak symbols dynamic when building a dynamic
-object.  Not all targets support this option.  If neither
-\&\fB\-z nodynamic-undefined-weak\fR nor \fB\-z dynamic-undefined-weak\fR
-are given, a target may default to either option being in force, or
-make some other selection of undefined weak symbols dynamic.
-.IP "\fBnoreloc-overflow\fR" 4
-.IX Item "noreloc-overflow"
-Disable relocation overflow check.  This can be used to disable
-relocation overflow check if there will be no dynamic relocation
-overflow at run-time.  Supported for x86_64.
 .IP "\fBcall\-nop=prefix\-addr\fR" 4
 .IX Item "call-nop=prefix-addr"
 .PD 0
@@ -1122,20 +988,188 @@ to a locally defined function, foo, via its \s-1GOT\s0 slot.
 \&\fBcall\-nop=prefix\-\fR\fIbyte\fR generates \f(CW\*(C`\f(CIbyte\f(CW call foo\*(C'\fR.
 \&\fBcall\-nop=suffix\-\fR\fIbyte\fR generates \f(CW\*(C`call foo \f(CIbyte\f(CW\*(C'\fR.
 Supported for i386 and x86_64.
+.IP "\fBcombreloc\fR" 4
+.IX Item "combreloc"
+.PD 0
+.IP "\fBnocombreloc\fR" 4
+.IX Item "nocombreloc"
+.PD
+Combine multiple dynamic relocation sections and sort to improve
+dynamic symbol lookup caching.  Do not do this if \fBnocombreloc\fR.
+.IP "\fBcommon\fR" 4
+.IX Item "common"
+.PD 0
+.IP "\fBnocommon\fR" 4
+.IX Item "nocommon"
+.PD
+Generate common symbols with \s-1STT_COMMON\s0 type during a relocatable
+link.  Use \s-1STT_OBJECT\s0 type if \fBnocommon\fR.
+.IP "\fBcommon\-page\-size=\fR\fIvalue\fR" 4
+.IX Item "common-page-size=value"
+Set the page size most commonly used to \fIvalue\fR.  Memory image
+layout will be optimized to minimize memory pages if the system is
+using pages of this size.
+.IP "\fBdefs\fR" 4
+.IX Item "defs"
+Report unresolved symbol references from regular object files.  This
+is done even if the linker is creating a non-symbolic shared library.
+This option is the inverse of \fB\-z undefs\fR.
+.IP "\fBdynamic-undefined-weak\fR" 4
+.IX Item "dynamic-undefined-weak"
+.PD 0
+.IP "\fBnodynamic-undefined-weak\fR" 4
+.IX Item "nodynamic-undefined-weak"
+.PD
+Make undefined weak symbols dynamic when building a dynamic object,
+if they are referenced from a regular object file and not forced local
+by symbol visibility or versioning.  Do not make them dynamic if
+\&\fBnodynamic-undefined-weak\fR.  If neither option is given, a target
+may default to either option being in force, or make some other
+selection of undefined weak symbols dynamic.  Not all targets support
+these options.
+.IP "\fBexecstack\fR" 4
+.IX Item "execstack"
+Marks the object as requiring executable stack.
+.IP "\fBglobal\fR" 4
+.IX Item "global"
+This option is only meaningful when building a shared object.  It makes
+the symbols defined by this shared object available for symbol resolution
+of subsequently loaded libraries.
+.IP "\fBglobalaudit\fR" 4
+.IX Item "globalaudit"
+This option is only meaningful when building a dynamic executable.
+This option marks the executable as requiring global auditing by
+setting the \f(CW\*(C`DF_1_GLOBAUDIT\*(C'\fR bit in the \f(CW\*(C`DT_FLAGS_1\*(C'\fR dynamic
+tag.  Global auditing requires that any auditing library defined via
+the \fB\-\-depaudit\fR or \fB\-P\fR command line options be run for
+all dynamic objects loaded by the application.
 .IP "\fBibtplt\fR" 4
 .IX Item "ibtplt"
 Generate Intel Indirect Branch Tracking (\s-1IBT\s0) enabled \s-1PLT\s0 entries.
 Supported for Linux/i386 and Linux/x86_64.
-.IP "\fB\s-1IBT\s0\fR" 4
-.IX Item "IBT"
+.IP "\fBibt\fR" 4
+.IX Item "ibt"
 Generate \s-1GNU_PROPERTY_X86_FEATURE_1_IBT\s0 in .note.gnu.property section
 to indicate compatibility with \s-1IBT.\s0  This also implies \fBibtplt\fR.
 Supported for Linux/i386 and Linux/x86_64.
+.IP "\fBinitfirst\fR" 4
+.IX Item "initfirst"
+This option is only meaningful when building a shared object.
+It marks the object so that its runtime initialization will occur
+before the runtime initialization of any other objects brought into
+the process at the same time.  Similarly the runtime finalization of
+the object will occur after the runtime finalization of any other
+objects.
+.IP "\fBinterpose\fR" 4
+.IX Item "interpose"
+Specify that the dynamic loader should modify its symbol search order
+so that symbols in this shared library interpose all other shared
+libraries not so marked.
+.IP "\fBlazy\fR" 4
+.IX Item "lazy"
+When generating an executable or shared library, mark it to tell the
+dynamic linker to defer function call resolution to the point when
+the function is called (lazy binding), rather than at load time.
+Lazy binding is the default.
+.IP "\fBloadfltr\fR" 4
+.IX Item "loadfltr"
+Specify that the object's filters be processed immediately at runtime.
+.IP "\fBmax\-page\-size=\fR\fIvalue\fR" 4
+.IX Item "max-page-size=value"
+Set the maximum memory page size supported to \fIvalue\fR.
+.IP "\fBmuldefs\fR" 4
+.IX Item "muldefs"
+Allow multiple definitions.
+.IP "\fBnocopyreloc\fR" 4
+.IX Item "nocopyreloc"
+Disable linker generated .dynbss variables used in place of variables
+defined in shared libraries.  May result in dynamic text relocations.
+.IP "\fBnodefaultlib\fR" 4
+.IX Item "nodefaultlib"
+Specify that the dynamic loader search for dependencies of this object
+should ignore any default library search paths.
+.IP "\fBnodelete\fR" 4
+.IX Item "nodelete"
+Specify that the object shouldn't be unloaded at runtime.
+.IP "\fBnodlopen\fR" 4
+.IX Item "nodlopen"
+Specify that the object is not available to \f(CW\*(C`dlopen\*(C'\fR.
+.IP "\fBnodump\fR" 4
+.IX Item "nodump"
+Specify that the object can not be dumped by \f(CW\*(C`dldump\*(C'\fR.
+.IP "\fBnoexecstack\fR" 4
+.IX Item "noexecstack"
+Marks the object as not requiring executable stack.
+.IP "\fBnoextern-protected-data\fR" 4
+.IX Item "noextern-protected-data"
+Don't treat protected data symbols as external when building a shared
+library.  This option overrides the linker backend default.  It can be
+used to work around incorrect relocations against protected data symbols
+generated by compiler.  Updates on protected data symbols by another
+module aren't visible to the resulting shared library.  Supported for
+i386 and x86\-64.
+.IP "\fBnoreloc-overflow\fR" 4
+.IX Item "noreloc-overflow"
+Disable relocation overflow check.  This can be used to disable
+relocation overflow check if there will be no dynamic relocation
+overflow at run-time.  Supported for x86_64.
+.IP "\fBnow\fR" 4
+.IX Item "now"
+When generating an executable or shared library, mark it to tell the
+dynamic linker to resolve all symbols when the program is started, or
+when the shared library is loaded by dlopen, instead of deferring
+function call resolution to the point when the function is first
+called.
+.IP "\fBorigin\fR" 4
+.IX Item "origin"
+Specify that the object requires \fB\f(CB$ORIGIN\fB\fR handling in paths.
+.IP "\fBrelro\fR" 4
+.IX Item "relro"
+.PD 0
+.IP "\fBnorelro\fR" 4
+.IX Item "norelro"
+.PD
+Create an \s-1ELF\s0 \f(CW\*(C`PT_GNU_RELRO\*(C'\fR segment header in the object.  This
+specifies a memory segment that should be made read-only after
+relocation, if supported.  Specifying \fBcommon-page-size\fR smaller
+than the system page size will render this protection ineffective.
+Don't create an \s-1ELF\s0 \f(CW\*(C`PT_GNU_RELRO\*(C'\fR segment if \fBnorelro\fR.
+.IP "\fBseparate-code\fR" 4
+.IX Item "separate-code"
+.PD 0
+.IP "\fBnoseparate-code\fR" 4
+.IX Item "noseparate-code"
+.PD
+Create separate code \f(CW\*(C`PT_LOAD\*(C'\fR segment header in the object.  This
+specifies a memory segment that should contain only instructions and must
+be in wholly disjoint pages from any other data.  Don't create separate
+code \f(CW\*(C`PT_LOAD\*(C'\fR segment if \fBnoseparate-code\fR is used.
 .IP "\fBshstk\fR" 4
 .IX Item "shstk"
 Generate \s-1GNU_PROPERTY_X86_FEATURE_1_SHSTK\s0 in .note.gnu.property section
 to indicate compatibility with Intel Shadow Stack.  Supported for
 Linux/i386 and Linux/x86_64.
+.IP "\fBstack\-size=\fR\fIvalue\fR" 4
+.IX Item "stack-size=value"
+Specify a stack size for an \s-1ELF\s0 \f(CW\*(C`PT_GNU_STACK\*(C'\fR segment.
+Specifying zero will override any default non-zero sized
+\&\f(CW\*(C`PT_GNU_STACK\*(C'\fR segment creation.
+.IP "\fBtext\fR" 4
+.IX Item "text"
+.PD 0
+.IP "\fBnotext\fR" 4
+.IX Item "notext"
+.IP "\fBtextoff\fR" 4
+.IX Item "textoff"
+.PD
+Report an error if \s-1DT_TEXTREL\s0 is set, i.e., if the binary has dynamic
+relocations in read-only sections.  Don't report an error if
+\&\fBnotext\fR or \fBtextoff\fR.
+.IP "\fBundefs\fR" 4
+.IX Item "undefs"
+Do not report unresolved symbol references from regular object files,
+either when creating an executable, or when creating a shared library.
+This option is the inverse of \fB\-z defs\fR.
 .RE
 .RS 4
 .Sp
@@ -1525,6 +1559,8 @@ is done even if the linker is creating a non-symbolic shared library.
 The switch \fB\-\-[no\-]allow\-shlib\-undefined\fR controls the
 behaviour for reporting unresolved references found in shared
 libraries being linked in.
+.Sp
+The effects of this option can be reverted by using \f(CW\*(C`\-z undefs\*(C'\fR.
 .IP "\fB\-\-allow\-multiple\-definition\fR" 4
 .IX Item "--allow-multiple-definition"
 .PD 0
@@ -2798,7 +2834,7 @@ the Info entries for \fIbinutils\fR and
 \&\fIld\fR.
 .SH "COPYRIGHT"
 .IX Header "COPYRIGHT"
-Copyright (c) 1991\-2017 Free Software Foundation, Inc.
+Copyright (c) 1991\-2018 Free Software Foundation, Inc.
 .PP
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the \s-1GNU\s0 Free Documentation License, Version 1.3

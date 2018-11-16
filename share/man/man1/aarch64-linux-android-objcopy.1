@@ -129,7 +129,7 @@
 .\" ========================================================================
 .\"
 .IX Title "OBJCOPY 1"
-.TH OBJCOPY 1 "2018-11-05" "binutils-2.29.0" "GNU Development Tools"
+.TH OBJCOPY 1 "2018-03-14" "binutils-2.30.0" "GNU Development Tools"
 .\" For nroff, turn off justification.  Always turn off hyphenation; it makes
 .\" way too many mistakes in technical documents.
 .if n .ad l
@@ -144,6 +144,7 @@ objcopy [\fB\-F\fR \fIbfdname\fR|\fB\-\-target=\fR\fIbfdname\fR]
         [\fB\-B\fR \fIbfdarch\fR|\fB\-\-binary\-architecture=\fR\fIbfdarch\fR]
         [\fB\-S\fR|\fB\-\-strip\-all\fR]
         [\fB\-g\fR|\fB\-\-strip\-debug\fR]
+        [\fB\-\-strip\-unneeded\fR]
         [\fB\-K\fR \fIsymbolname\fR|\fB\-\-keep\-symbol=\fR\fIsymbolname\fR]
         [\fB\-N\fR \fIsymbolname\fR|\fB\-\-strip\-symbol=\fR\fIsymbolname\fR]
         [\fB\-\-strip\-unneeded\-symbol=\fR\fIsymbolname\fR]
@@ -726,7 +727,7 @@ symbol table in the order they appear.
 .IX Item "--rename-section oldname=newname[,flags]"
 Rename a section from \fIoldname\fR to \fInewname\fR, optionally
 changing the section's flags to \fIflags\fR in the process.  This has
-the advantage over usng a linker script to perform the rename in that
+the advantage over using a linker script to perform the rename in that
 the output stays as an object file and does not become a linked
 executable.
 .Sp
@@ -1192,7 +1193,7 @@ with a backslash.  The \fIfile\fR may itself contain additional
 \&\fIld\fR\|(1), \fIobjdump\fR\|(1), and the Info entries for \fIbinutils\fR.
 .SH "COPYRIGHT"
 .IX Header "COPYRIGHT"
-Copyright (c) 1991\-2017 Free Software Foundation, Inc.
+Copyright (c) 1991\-2018 Free Software Foundation, Inc.
 .PP
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the \s-1GNU\s0 Free Documentation License, Version 1.3
