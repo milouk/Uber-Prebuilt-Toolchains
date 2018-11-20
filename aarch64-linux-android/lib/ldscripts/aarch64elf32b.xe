@@ -7,7 +7,7 @@ OUTPUT_FORMAT("elf32-bigaarch64", "elf32-bigaarch64",
 	      "elf32-littleaarch64")
 OUTPUT_ARCH(aarch64:ilp32)
 ENTRY(_start)
-SEARCH_DIR("=/home/nato/Android/kernel/tc/uber/out/aarch64-linux-android-8.x/aarch64-linux-android/lib");
+SEARCH_DIR("=/home/michael/Desktop/uber/out/aarch64-linux-android-9.x/aarch64-linux-android/lib");
 SECTIONS
 {
   /* Read-only sections, merged into text segment: */

@@ -1519,7 +1519,7 @@ argument has any tokens, then a '__VA_OPT__' invocation expands to its
 argument; but if the variable argument does not have any tokens, the
 '__VA_OPT__' expands to nothing:
 
-     #define eprintf(format, ...) \\
+     #define eprintf(format, ...) \
        fprintf (stderr, format __VA_OPT__(,) __VA_ARGS__)
 
    '__VA_OPT__' is also available in GNU C and GNU C++.
@@ -4089,7 +4089,7 @@ single-letter options may _not_ be grouped: '-dM' is very different from
      specify a target object file.
 
      Since '-E' is not implied, '-MD' can be used to generate a
-     dependency output file as a side-effect of the compilation process.
+     dependency output file as a side effect of the compilation process.
 
 '-MMD'
      Like '-MD' except mention only user header files, not system header
@@ -4235,7 +4235,7 @@ single-letter options may _not_ be grouped: '-dM' is very different from
      like '-C', except that comments contained within macros are also
      passed through to the output file where the macro is expanded.
 
-     In addition to the side-effects of the '-C' option, the '-CC'
+     In addition to the side effects of the '-C' option, the '-CC'
      option causes all C++-style comments inside a macro to be converted
      to C-style comments.  This is to prevent later use of that macro
      from inadvertently commenting out the remainder of the source line.
@@ -5357,53 +5357,53 @@ Node: Macro Arguments48751
 Node: Stringizing52890
 Node: Concatenation56051
 Node: Variadic Macros59148
-Node: Predefined Macros64101
-Node: Standard Predefined Macros64689
-Node: Common Predefined Macros70903
-Node: System-specific Predefined Macros91846
-Node: C++ Named Operators93869
-Node: Undefining and Redefining Macros94833
-Node: Directives Within Macro Arguments96931
-Node: Macro Pitfalls97872
-Node: Misnesting98405
-Node: Operator Precedence Problems99517
-Node: Swallowing the Semicolon101383
-Node: Duplication of Side Effects103406
-Node: Self-Referential Macros105589
-Node: Argument Prescan107998
-Node: Newlines in Arguments111749
-Node: Conditionals112700
-Node: Conditional Uses114396
-Node: Conditional Syntax115754
-Node: Ifdef116074
-Node: If119231
-Node: Defined121535
-Node: Else122928
-Node: Elif123498
-Node: Deleted Code124787
-Node: Diagnostics126034
-Node: Line Control127583
-Node: Pragmas129861
-Node: Other Directives133994
-Node: Preprocessor Output135044
-Node: Traditional Mode138197
-Node: Traditional lexical analysis139334
-Node: Traditional macros141837
-Node: Traditional miscellany145634
-Node: Traditional warnings146630
-Node: Implementation Details148827
-Node: Implementation-defined behavior149390
-Ref: Identifier characters150140
-Node: Implementation limits153007
-Node: Obsolete Features155680
-Node: Invocation158524
-Ref: dashMF164559
-Ref: fdollars-in-identifiers169138
-Ref: Wtrigraphs183134
-Node: Environment Variables185189
-Node: GNU Free Documentation License188882
-Node: Index of Directives214027
-Node: Option Index216107
-Node: Concept Index222063
+Node: Predefined Macros64100
+Node: Standard Predefined Macros64688
+Node: Common Predefined Macros70902
+Node: System-specific Predefined Macros91845
+Node: C++ Named Operators93868
+Node: Undefining and Redefining Macros94832
+Node: Directives Within Macro Arguments96930
+Node: Macro Pitfalls97871
+Node: Misnesting98404
+Node: Operator Precedence Problems99516
+Node: Swallowing the Semicolon101382
+Node: Duplication of Side Effects103405
+Node: Self-Referential Macros105588
+Node: Argument Prescan107997
+Node: Newlines in Arguments111748
+Node: Conditionals112699
+Node: Conditional Uses114395
+Node: Conditional Syntax115753
+Node: Ifdef116073
+Node: If119230
+Node: Defined121534
+Node: Else122927
+Node: Elif123497
+Node: Deleted Code124786
+Node: Diagnostics126033
+Node: Line Control127582
+Node: Pragmas129860
+Node: Other Directives133993
+Node: Preprocessor Output135043
+Node: Traditional Mode138196
+Node: Traditional lexical analysis139333
+Node: Traditional macros141836
+Node: Traditional miscellany145633
+Node: Traditional warnings146629
+Node: Implementation Details148826
+Node: Implementation-defined behavior149389
+Ref: Identifier characters150139
+Node: Implementation limits153006
+Node: Obsolete Features155679
+Node: Invocation158523
+Ref: dashMF164558
+Ref: fdollars-in-identifiers169137
+Ref: Wtrigraphs183133
+Node: Environment Variables185188
+Node: GNU Free Documentation License188881
+Node: Index of Directives214026
+Node: Option Index216106
+Node: Concept Index222062
 
 End Tag Table

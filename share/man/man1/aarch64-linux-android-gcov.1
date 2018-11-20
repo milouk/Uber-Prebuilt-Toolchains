@@ -129,7 +129,7 @@
 .\" ========================================================================
 .\"
 .IX Title "GCOV 1"
-.TH GCOV 1 "2018-03-14" "gcc-8.0.1" "GNU"
+.TH GCOV 1 "2018-06-04" "gcc-9.0.0" "GNU"
 .\" For nroff, turn off justification.  Always turn off hyphenation; it makes
 .\" way too many mistakes in technical documents.
 .if n .ad l
@@ -154,6 +154,7 @@ gcov [\fB\-v\fR|\fB\-\-version\fR] [\fB\-h\fR|\fB\-\-help\fR]
      [\fB\-p\fR|\fB\-\-preserve\-paths\fR]
      [\fB\-r\fR|\fB\-\-relative\-only\fR]
      [\fB\-s\fR|\fB\-\-source\-prefix\fR \fIdirectory\fR]
+     [\fB\-t\fR|\fB\-\-stdout\fR]
      [\fB\-u\fR|\fB\-\-unconditional\-branches\fR]
      [\fB\-x\fR|\fB\-\-hash\-filenames\fR]
      \fIfiles\fR
@@ -276,8 +277,9 @@ be used by \fBlcov\fR or other tools. The output is a single
 The format of the intermediate \fI.gcov\fR file is plain text with
 one entry per line
 .Sp
-.Vb 5
+.Vb 6
 \&        version:<gcc_version>
+\&        cwd:<working_directory>
 \&        file:<source_file_name>
 \&        function:<start_line_number>,<end_line_number>,<execution_count>,<function_name>
 \&        lcount:<line number>,<execution_count>,<has_unexecuted_block>
@@ -299,6 +301,7 @@ Here is a sample when \fB\-i\fR is used in conjunction with \fB\-b\fR option:
 .Sp
 .Vb 10
 \&        version: 8.1.0 20180103
+\&        cwd:/home/gcc/testcase
 \&        file:tmp.cpp
 \&        function:7,7,0,_ZN3FooIcEC2Ev
 \&        function:7,7,1,_ZN3FooIiEC2Ev
@@ -431,6 +434,13 @@ coverage files.  This option is useful when building in a separate
 directory, and the pathname to the source directory is not wanted when
 determining the output file names.  Note that this prefix detection is
 applied before determining whether the source file is absolute.
+.IP "\fB\-t\fR" 4
+.IX Item "-t"
+.PD 0
+.IP "\fB\-\-stdout\fR" 4
+.IX Item "--stdout"
+.PD
+Output to standard output instead of output files.
 .IP "\fB\-u\fR" 4
 .IX Item "-u"
 .PD 0
@@ -566,6 +576,7 @@ Here is a sample:
 .PP
 .Vb 10
 \&                \-:    0:Source:tmp.cpp
+\&                \-:    0:Working directory:/home/gcc/testcase
 \&                \-:    0:Graph:tmp.gcno
 \&                \-:    0:Data:tmp.gcda
 \&                \-:    0:Runs:1
@@ -633,6 +644,7 @@ counts, and the output looks like this:
 .PP
 .Vb 10
 \&                \-:    0:Source:tmp.cpp
+\&                \-:    0:Working directory:/home/gcc/testcase
 \&                \-:    0:Graph:tmp.gcno
 \&                \-:    0:Data:tmp.gcda
 \&                \-:    0:Runs:1
@@ -720,6 +732,7 @@ When you use the \fB\-b\fR option, your output looks like this:
 .PP
 .Vb 10
 \&                \-:    0:Source:tmp.cpp
+\&                \-:    0:Working directory:/home/gcc/testcase
 \&                \-:    0:Graph:tmp.gcno
 \&                \-:    0:Data:tmp.gcda
 \&                \-:    0:Runs:1
@@ -911,6 +924,14 @@ is executed after all user defined static destructors,
 as well as handlers registered with \f(CW\*(C`atexit\*(C'\fR.
 If an executable loads a dynamic shared object via dlopen functionality,
 \&\fB\-Wl,\-\-dynamic\-list\-data\fR is needed to dump all profile data.
+.PP
+Profiling run-time library reports various errors related to profile
+manipulation and profile saving.  Errors are printed into standard error output
+or \fB\s-1GCOV_ERROR_FILE\s0\fR file, if environment variable is used.
+In order to terminate immediately after an errors occurs
+set \fB\s-1GCOV_EXIT_AT_ERROR\s0\fR environment variable.
+That can help users to find profile clashing which leads
+to a misleading profile.
 .SH "SEE ALSO"
 .IX Header "SEE ALSO"
 \&\fIgpl\fR\|(7), \fIgfdl\fR\|(7), \fIfsf\-funding\fR\|(7), \fIgcc\fR\|(1) and the Info entry for \fIgcc\fR.

@@ -863,8 +863,8 @@ option.
 '--without-multilib-list'
      Specify what multilibs to build.  LIST is a comma separated list of
      values, possibly consisting of a single value.  Currently only
-     implemented for arm*-*-*, sh*-*-* and x86-64-*-linux*.  The
-     accepted values and meaning for each target is given below.
+     implemented for arm*-*-*, riscv*-*-*, sh*-*-* and x86-64-*-linux*.
+     The accepted values and meaning for each target is given below.
 
      'arm*-*-*'
           LIST is a comma separated list of 'aprofile' and 'rmprofile'
@@ -901,6 +901,14 @@ option.
           floating-point'-mfloat-abi=soft' '-mfloat-abi=soft'
           ABIs        '-mfloat-abi=softfp' '-mfloat-abi=softfp'
                       '-mfloat-abi=hard'   '-mfloat-abi=hard'
+
+     'riscv*-*-*'
+          LIST is a single ABI name.  The target architecture must be
+          either 'rv32gc' or 'rv64gc'.  This will build a single
+          multilib for the specified architecture and ABI pair.  If
+          '--with-multilib-list' is not given, then a default set of
+          multilibs is selected based on the value of '--target'.  This
+          is usually a large set of multilibs.
 
      'sh*-*-*'
           LIST is a comma separated list of CPU names.  These must be of
@@ -1828,10 +1836,11 @@ option.
      '-fcf-protection' and, if needed, other target specific options to
      a set of building options.
 
-     The option is enabled by default on Linux/x86 if target binutils
-     supports 'Intel CET' instructions.  In this case the target
-     libraries are configured to get additional '-fcf-protection' and
-     '-mcet' options.
+     The option is disabled by default.  When '--enable-cet=auto' is
+     used, it is enabled on Linux/x86 if target binutils supports 'Intel
+     CET' instructions and disabled otherwise.  In this case the target
+     libraries are configured to get additional '-fcf-protection'
+     option.
 
 Cross-Compiler-Specific Options
 -------------------------------
@@ -2210,8 +2219,8 @@ configurations are:
 'bootstrap-cet'
      This option enables Intel CET for host tools during bootstrapping.
      'BUILD_CONFIG=bootstrap-cet' is equivalent to adding
-     '-fcf-protection -mcet' to 'BOOT_CFLAGS'.  This option assumes that
-     the host supports Intel CET (e.g.  GNU assembler version 2.30 or
+     '-fcf-protection' to 'BOOT_CFLAGS'.  This option assumes that the
+     host supports Intel CET (e.g.  GNU assembler version 2.30 or
      later).
 
 'bootstrap-time'
@@ -3429,7 +3438,8 @@ Nvidia PTX target.
 GCC where to find it:
 '--with-build-time-tools=[install-nvptx-tools]/nvptx-none/bin'.
 
-   A nvptx port of newlib is available at nvptx-newlib.  It can be
+   You will need newlib 3.0 git revision
+cd31fbb2aea25f94d7ecedc9db16dfc87ab0c316 or later.  It can be
 automatically built together with GCC.  For this, add a symbolic link to
 nvptx-newlib's 'newlib' directory to the directory containing the GCC
 sources.
@@ -4572,7 +4582,7 @@ Concept Index
 * Menu:
 
 * Binaries:                              Binaries.           (line    6)
-* build_configargs:                      Configuration.      (line 1543)
+* build_configargs:                      Configuration.      (line 1552)
 * Configuration:                         Configuration.      (line    6)
 * configurations supported by GCC:       Configurations.     (line    6)
 * Downloading GCC:                       Downloading the source.
@@ -4582,7 +4592,7 @@ Concept Index
 * FDL, GNU Free Documentation License:   GNU Free Documentation License.
                                                              (line    6)
 * Host specific installation:            Specific.           (line    6)
-* host_configargs:                       Configuration.      (line 1547)
+* host_configargs:                       Configuration.      (line 1556)
 * Installing GCC: Binaries:              Binaries.           (line    6)
 * Installing GCC: Building:              Building.           (line    6)
 * Installing GCC: Configuration:         Configuration.      (line    6)
@@ -4592,7 +4602,7 @@ Concept Index
 * Specific installation notes:           Specific.           (line    6)
 * Target specific installation:          Specific.           (line    6)
 * Target specific installation notes:    Specific.           (line    6)
-* target_configargs:                     Configuration.      (line 1551)
+* target_configargs:                     Configuration.      (line 1560)
 * Testing:                               Testing.            (line    6)
 * Testsuite:                             Testing.            (line    6)
 
@@ -4607,96 +4617,96 @@ Node: Configuration16106
 Ref: with-gnu-as31706
 Ref: with-as32601
 Ref: with-gnu-ld34014
-Ref: WithAixSoname54013
-Ref: AixLdCommand54674
-Node: Building89645
-Node: Testing105982
-Node: Final install113854
-Node: Binaries119154
-Node: Specific120281
-Ref: aarch64-x-x120788
-Ref: alpha-x-x122220
-Ref: amd64-x-solaris210122629
-Ref: arc-x-elf32122732
-Ref: arc-linux-uclibc122908
-Ref: arm-x-eabi123049
-Ref: avr123302
-Ref: bfin123883
-Ref: cr16124125
-Ref: cris124541
-Ref: dos125239
-Ref: epiphany-x-elf125562
-Ref: x-x-freebsd125667
-Ref: ft32-x-elf127467
-Ref: h8300-hms127565
-Ref: hppa-hp-hpux127917
-Ref: hppa-hp-hpux10130289
-Ref: hppa-hp-hpux11130702
-Ref: x-x-linux-gnu136104
-Ref: ix86-x-linux136297
-Ref: ix86-x-solaris210136610
-Ref: ia64-x-linux137955
-Ref: ia64-x-hpux138725
-Ref: x-ibm-aix139280
-Ref: TransferAixShobj142942
-Ref: iq2000-x-elf146752
-Ref: lm32-x-elf146892
-Ref: lm32-x-uclinux146996
-Ref: m32c-x-elf147124
-Ref: m32r-x-elf147226
-Ref: m68k-x-x147328
-Ref: m68k-x-uclinux148366
-Ref: microblaze-x-elf148611
-Ref: mips-x-x148730
-Ref: moxie-x-elf150640
-Ref: msp430-x-elf150687
-Ref: nds32le-x-elf150790
-Ref: nds32be-x-elf150862
-Ref: nvptx-x-none150931
-Ref: powerpc-x-x151458
-Ref: powerpc-x-darwin151649
-Ref: powerpc-x-elf152143
-Ref: powerpc-x-linux-gnu152228
-Ref: powerpc-x-netbsd152323
-Ref: powerpc-x-eabisim152411
-Ref: powerpc-x-eabi152537
-Ref: powerpcle-x-elf152613
-Ref: powerpcle-x-eabisim152705
-Ref: powerpcle-x-eabi152838
-Ref: rl78-x-elf152921
-Ref: riscv32-x-elf153027
-Ref: riscv32-x-linux153237
-Ref: riscv64-x-elf153415
-Ref: riscv64-x-linux153625
-Ref: rx-x-elf153803
-Ref: s390-x-linux153849
-Ref: s390x-x-linux153921
-Ref: s390x-ibm-tpf154008
-Ref: x-x-solaris2154139
-Ref: sparc-x-x158006
-Ref: sparc-sun-solaris2158508
-Ref: sparc-sun-solaris210159647
-Ref: sparc-x-linux160022
-Ref: sparc64-x-solaris2160053
-Ref: sparcv9-x-solaris2160386
-Ref: c6x-x-x160473
-Ref: tilegx-*-linux160565
-Ref: tilegxbe-*-linux160707
-Ref: tilepro-*-linux160850
-Ref: visium-x-elf160971
-Ref: x-x-vxworks161079
-Ref: x86-64-x-x162602
-Ref: x86-64-x-solaris210162930
-Ref: xtensa-x-elf163594
-Ref: xtensa-x-linux164265
-Ref: windows164606
-Ref: x-x-cygwin166447
-Ref: x-x-mingw32167000
-Ref: older167226
-Ref: elf169343
-Node: Old169601
-Node: Configurations172734
-Node: GNU Free Documentation License176272
-Node: Concept Index201400
+Ref: WithAixSoname54434
+Ref: AixLdCommand55095
+Node: Building90132
+Node: Testing106463
+Node: Final install114335
+Node: Binaries119635
+Node: Specific120762
+Ref: aarch64-x-x121269
+Ref: alpha-x-x122701
+Ref: amd64-x-solaris210123110
+Ref: arc-x-elf32123213
+Ref: arc-linux-uclibc123389
+Ref: arm-x-eabi123530
+Ref: avr123783
+Ref: bfin124364
+Ref: cr16124606
+Ref: cris125022
+Ref: dos125720
+Ref: epiphany-x-elf126043
+Ref: x-x-freebsd126148
+Ref: ft32-x-elf127948
+Ref: h8300-hms128046
+Ref: hppa-hp-hpux128398
+Ref: hppa-hp-hpux10130770
+Ref: hppa-hp-hpux11131183
+Ref: x-x-linux-gnu136585
+Ref: ix86-x-linux136778
+Ref: ix86-x-solaris210137091
+Ref: ia64-x-linux138436
+Ref: ia64-x-hpux139206
+Ref: x-ibm-aix139761
+Ref: TransferAixShobj143423
+Ref: iq2000-x-elf147233
+Ref: lm32-x-elf147373
+Ref: lm32-x-uclinux147477
+Ref: m32c-x-elf147605
+Ref: m32r-x-elf147707
+Ref: m68k-x-x147809
+Ref: m68k-x-uclinux148847
+Ref: microblaze-x-elf149092
+Ref: mips-x-x149211
+Ref: moxie-x-elf151121
+Ref: msp430-x-elf151168
+Ref: nds32le-x-elf151271
+Ref: nds32be-x-elf151343
+Ref: nvptx-x-none151412
+Ref: powerpc-x-x151975
+Ref: powerpc-x-darwin152166
+Ref: powerpc-x-elf152660
+Ref: powerpc-x-linux-gnu152745
+Ref: powerpc-x-netbsd152840
+Ref: powerpc-x-eabisim152928
+Ref: powerpc-x-eabi153054
+Ref: powerpcle-x-elf153130
+Ref: powerpcle-x-eabisim153222
+Ref: powerpcle-x-eabi153355
+Ref: rl78-x-elf153438
+Ref: riscv32-x-elf153544
+Ref: riscv32-x-linux153754
+Ref: riscv64-x-elf153932
+Ref: riscv64-x-linux154142
+Ref: rx-x-elf154320
+Ref: s390-x-linux154366
+Ref: s390x-x-linux154438
+Ref: s390x-ibm-tpf154525
+Ref: x-x-solaris2154656
+Ref: sparc-x-x158523
+Ref: sparc-sun-solaris2159025
+Ref: sparc-sun-solaris210160164
+Ref: sparc-x-linux160539
+Ref: sparc64-x-solaris2160570
+Ref: sparcv9-x-solaris2160903
+Ref: c6x-x-x160990
+Ref: tilegx-*-linux161082
+Ref: tilegxbe-*-linux161224
+Ref: tilepro-*-linux161367
+Ref: visium-x-elf161488
+Ref: x-x-vxworks161596
+Ref: x86-64-x-x163119
+Ref: x86-64-x-solaris210163447
+Ref: xtensa-x-elf164111
+Ref: xtensa-x-linux164782
+Ref: windows165123
+Ref: x-x-cygwin166964
+Ref: x-x-mingw32167517
+Ref: older167743
+Ref: elf169860
+Node: Old170118
+Node: Configurations173251
+Node: GNU Free Documentation License176789
+Node: Concept Index201917
 
 End Tag Table
